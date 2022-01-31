@@ -1,0 +1,19 @@
+---
+
+- name: Prepare firewall rules [specific sources]
+  set_fact:
+    __pb_firewall_rules: "{{ __pb_firewall_rules | default([]) + [{ 'port': pgbouncer_port, 'protocol': 'tcp', 'source': item }] }}"
+  loop: "{{ pgbouncer_allow_sources }}"
+
+- name: Prepare firewall rules [any source]
+  set_fact:
+    __pb_firewall_rules:
+      - port: "{{ pgbouncer_port }}"
+        protocol: tcp
+  when: pgbouncer_allow_sources | length == 0
+
+- name: Configure firewall
+  include_role:
+    name: xait.config_firewall
+  vars:
+    firewall_rules: "{{ __pb_firewall_rules }}"

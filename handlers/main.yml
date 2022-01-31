@@ -1,0 +1,35 @@
+---
+
+- name: reload systemd
+  systemd:
+    daemon_reload: true
+
+- name: reload single pgbouncer instance
+  listen: reload pgbouncer
+  systemd:
+    name: pgbouncer
+    state: reloaded
+  when: pgbouncer_instances | int == 1
+
+- name: restart single pgbouncer instance
+  listen: restart pgbouncer
+  systemd:
+    name: pgbouncer
+    state: restarted
+  when: pgbouncer_instances | int == 1
+
+- name: reload pgbouncer instances
+  listen: reload pgbouncer
+  systemd:
+    name: "pgbouncer@{{ item }}"
+    state: reloaded
+  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+  when: pgbouncer_instances | int > 1
+
+- name: restart single pgbouncer instance
+  listen: restart pgbouncer
+  systemd:
+    name: "pgbouncer@{{ item }}"
+    state: restarted
+  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+  when: pgbouncer_instances | int > 1

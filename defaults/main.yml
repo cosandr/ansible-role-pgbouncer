@@ -1,0 +1,20 @@
+---
+
+postgresql_version: 14
+pgbouncer_allow_sources: []
+pgbouncer_databases:
+  - name: '*'
+    opts: ''
+pgbouncer_default_pool_size: 1000
+pgbouncer_instances: 3
+pgbouncer_listen: '*'
+pgbouncer_max_client_conn: 2048
+pgbouncer_pool_mode: session
+pgbouncer_port: 6432
+pgbouncer_reserve_pool_size: 100
+
+# SSL config
+ssl_enable: false
+ssl_ca_path: "/etc/pki/tls/certs/pg-ca.crt"
+ssl_cert_path: "/etc/pki/tls/certs/pgbouncer.crt"
+ssl_private_key_path: "/etc/pki/tls/private/pgbouncer.key"

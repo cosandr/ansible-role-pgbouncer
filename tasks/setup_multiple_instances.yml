@@ -1,0 +1,39 @@
+# Loosely based on https://www.2ndquadrant.com/en/blog/running-multiple-pgbouncer-instances-with-systemd/
+---
+
+- name: Copy pgbouncer service file
+  copy:
+    src: "pgbouncer@.service"
+    dest: "/etc/systemd/system/pgbouncer@.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload systemd
+
+- name: Configure pgbouncer
+  template:
+    src: pgbouncer.ini.j2
+    dest: "/etc/pgbouncer/pgbouncer-{{ item }}.ini"
+    owner: root
+    group: pgbouncer
+    mode: 0640
+  notify: reload pgbouncer
+  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+
+- name: Create pgbouncer socket dirs
+  file:
+    path: "/run/pgbouncer/{{ item }}"
+    state: directory
+    owner: pgbouncer
+    group: pgbouncer
+    mode: 0700
+  notify: reload pgbouncer
+  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+
+- name: Mask original service
+  systemd:
+    name: pgbouncer.service
+    masked: true
+
+- name: Flush handlers
+  meta: flush_handlers

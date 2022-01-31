@@ -1,0 +1,67 @@
+---
+
+- name: Install pgbouncer
+  yum:
+    name: pgbouncer
+    state: present
+  tags: ["install"]
+
+- name: Copy SSL certs to pgbouncer
+  copy:
+    src: "{{ item.src }}"
+    remote_src: true
+    dest: "{{ item.dest }}"
+    owner: pgbouncer
+    group: pgbouncer
+    mode: "{{ item.mode | default('0644') }}"
+  loop:
+    - src: "{{ ssl_ca_path }}"
+      dest: "/etc/pgbouncer/ca.crt"
+    - src: "{{ ssl_cert_path }}"
+      dest: "/etc/pgbouncer/pgbouncer.crt"
+    - src: "{{ ssl_private_key_path }}"
+      dest: "/etc/pgbouncer/pgbouncer.key"
+  notify: restart pgbouncer
+  when: ssl_enable | bool
+
+- name: Configure pgbouncer
+  template:
+    src: pgbouncer.ini.j2
+    dest: /etc/pgbouncer/pgbouncer.ini
+    owner: root
+    group: pgbouncer
+    mode: 0640
+  notify: reload pgbouncer
+  when: pgbouncer_instances | int == 1
+
+- name: Add pgbouncer user list
+  copy:
+    src: userlist.txt
+    dest: /etc/pgbouncer/userlist.txt
+    owner: root
+    group: pgbouncer
+    mode: 0640
+  notify: reload pgbouncer
+
+- name: Setup multiple instances
+  include_tasks: setup_multiple_instances.yml
+  when: pgbouncer_instances | int > 1
+
+- name: Enable and start single pgbouncer instance
+  systemd:
+    name: pgbouncer
+    state: started
+    enabled: true
+  when: pgbouncer_instances | int == 1
+
+- name: Enable and start pgbouncer instances
+  systemd:
+    name: "pgbouncer@{{ item }}"
+    state: started
+    enabled: true
+  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+  when: pgbouncer_instances | int > 1
+
+- name: Configure firewall
+  include_tasks: firewall.yml
+  tags: ["firewall"]

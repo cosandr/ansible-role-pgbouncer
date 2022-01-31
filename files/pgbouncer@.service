@@ -1,0 +1,22 @@
+[Unit]
+Description=A lightweight connection pooler for PostgreSQL (%i)
+After=syslog.target
+After=network.target
+
+[Service]
+RemainAfterExit=yes
+Type=notify
+
+User=pgbouncer
+Group=pgbouncer
+
+PIDFile=/var/run/pgbouncer/pgbouncer-%i.pid
+ExecStart=/usr/bin/pgbouncer /etc/pgbouncer/pgbouncer-%i.ini
+ExecReload=/usr/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+
+# Give a reasonable amount of time for the server to start up/shut down
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target
