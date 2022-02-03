@@ -10,7 +10,7 @@ pgbouncer_databases:
   - name: '*'
     opts: ''
 pgbouncer_default_pool_size: 1000
-pgbouncer_instances: 3
+pgbouncer_instances: "{{ ansible_processor_vcpus | default(3) }}"
 pgbouncer_listen: '*'
 pgbouncer_max_client_conn: 2048
 pgbouncer_pool_mode: session

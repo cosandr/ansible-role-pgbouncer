@@ -41,7 +41,7 @@ SSL certificates must be copied before running this role if `ssl_enable` is true
 - `pgbouncer_allow_sources` list of IPs allowed to connect to pgbouncer, all will be allowed if not specified
 - `pgbouncer_databases` list of databases, defaults to localhost on unix socket
 - `pgbouncer_default_pool_size` defaults to 1000
-- `pgbouncer_instances` how many pgbouncer instances to run, defaults to 3
+- `pgbouncer_instances` how many pgbouncer instances to run, defaults to number of CPUs with a fallback of 3
 - `pgbouncer_listen` defaults to `*`
 - `pgbouncer_max_client_conn` defaults to 2048
 - `pgbouncer_pool_mode` defaults to `session`
