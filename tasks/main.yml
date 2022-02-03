@@ -15,14 +15,14 @@
     group: pgbouncer
     mode: "{{ item.mode | default('0644') }}"
   loop:
-    - src: "{{ ssl_ca_path }}"
+    - src: "{{ pgbouncer_ssl_ca_path }}"
       dest: "/etc/pgbouncer/ca.crt"
-    - src: "{{ ssl_cert_path }}"
+    - src: "{{ pgbouncer_ssl_cert_path }}"
       dest: "/etc/pgbouncer/pgbouncer.crt"
-    - src: "{{ ssl_private_key_path }}"
+    - src: "{{ pgbouncer_ssl_private_key_path }}"
       dest: "/etc/pgbouncer/pgbouncer.key"
   notify: restart pgbouncer
-  when: ssl_enable | bool
+  when: pgbouncer_ssl_enable | bool
 
 - name: Configure pgbouncer
   template:
@@ -59,7 +59,7 @@
     name: "pgbouncer@{{ item }}"
     state: started
     enabled: true
-  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+  loop: "{{ range(1, (pgbouncer_instances | int) + 1) | list }}"
   when: pgbouncer_instances | int > 1
 
 - name: Configure firewall

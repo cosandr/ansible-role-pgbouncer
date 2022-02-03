@@ -28,7 +28,28 @@ ansible-galaxy install -r requirements.yml
 
 ## Requirements
 
-SSL certificates must be copied before running this role if `ssl_enable` is true.
+SSL certificates must be copied before running this role if `pgbouncer_ssl_enable` is true.
+
+A user_lookup function is required in all databases to be accessed by pgbouncer, [for example](https://www.pgbouncer.org/config.html#example):
+
+```sql
+CREATE SCHEMA AUTHORIZATION pgbouncer;
+-- https://www.enterprisedb.com/postgres-tutorials/pgbouncer-authquery-and-authuser-pro-tips
+CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(username text) RETURNS TABLE(usename name, passwd text) AS 'SELECT usename, passwd FROM pg_catalog.pg_shadow WHERE usename = username' LANGUAGE sql SECURITY DEFINER;
+REVOKE ALL ON FUNCTION pgbouncer.user_lookup(text) FROM public, pgbouncer;
+GRANT EXECUTE ON FUNCTION pgbouncer.user_lookup(text) TO pgbouncer;
+```
+
+The queries can be run on a template, then any databases created from them will inherit the `pgbouncer` schema and `user_lookup` function.
+
+Don't forget to configure `pg_hba.conf` as well:
+
+```conf
+# UNIX socket on the same host
+local all pgbouncer peer
+# TCP from another host (10.0.10.20 is the pgbouncer host)
+host all pgbouncer 10.0.10.20 md5
+```
 
 ## Role Variables
 
@@ -47,10 +68,10 @@ SSL certificates must be copied before running this role if `ssl_enable` is true
 - `pgbouncer_pool_mode` defaults to `session`
 - `pgbouncer_port` defaults to 6432
 - `pgbouncer_reserve_pool_size` defaults to 100
-- `ssl_enable` whether or not to enable SSL, requires the following files to be present on the remote node:
-  - `ssl_ca_path` defaults to `/etc/pki/tls/certs/pg-ca.crt`
-  - `ssl_cert_path` defaults to `/etc/pki/tls/certs/pgbouncer.crt`
-  - `ssl_private_key_path` defaults to `/etc/pki/tls/private/pgbouncer.key`
+- `pgbouncer_ssl_enable` whether or not to enable SSL, requires the following files to be present on the remote node:
+  - `pgbouncer_ssl_ca_path` defaults to `/etc/pki/tls/certs/pg-ca.crt`
+  - `pgbouncer_ssl_cert_path` defaults to `/etc/pki/tls/certs/pgbouncer.crt`
+  - `pgbouncer_ssl_private_key_path` defaults to `/etc/pki/tls/private/pgbouncer.key`
 
 ## Example Playbook
 

@@ -23,7 +23,7 @@
   systemd:
     name: "pgbouncer@{{ item }}"
     state: reloaded
-  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+  loop: "{{ range(1, (pgbouncer_instances | int) + 1) | list }}"
   when: pgbouncer_instances | int > 1
 
 - name: restart single pgbouncer instance
@@ -31,5 +31,5 @@
   systemd:
     name: "pgbouncer@{{ item }}"
     state: restarted
-  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+  loop: "{{ range(1, (pgbouncer_instances | int) + 1) | list }}"
   when: pgbouncer_instances | int > 1

@@ -30,7 +30,7 @@ logfile = /var/log/pgbouncer/pgbouncer.log
 pidfile = /run/pgbouncer/pgbouncer.pid
 {% endif %}
 
-{% if ssl_enable | bool %}
+{% if pgbouncer_ssl_enable | bool %}
 server_tls_sslmode = require
 server_tls_ca_file = /etc/pgbouncer/ca.crt
 server_tls_key_file = /etc/pgbouncer/pgbouncer.key

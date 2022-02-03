@@ -18,7 +18,7 @@ pgbouncer_port: 6432
 pgbouncer_reserve_pool_size: 100
 
 # SSL config
-ssl_enable: false
-ssl_ca_path: "/etc/pki/tls/certs/pg-ca.crt"
-ssl_cert_path: "/etc/pki/tls/certs/pgbouncer.crt"
-ssl_private_key_path: "/etc/pki/tls/private/pgbouncer.key"
+pgbouncer_ssl_enable: false
+pgbouncer_ssl_ca_path: "/etc/pki/tls/certs/pg-ca.crt"
+pgbouncer_ssl_cert_path: "/etc/pki/tls/certs/pgbouncer.crt"
+pgbouncer_ssl_private_key_path: "/etc/pki/tls/private/pgbouncer.key"

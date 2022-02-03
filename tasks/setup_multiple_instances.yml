@@ -18,7 +18,7 @@
     group: pgbouncer
     mode: 0640
   notify: reload pgbouncer
-  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+  loop: "{{ range(1, (pgbouncer_instances | int) + 1) | list }}"
 
 - name: Create pgbouncer socket dirs
   file:
@@ -28,7 +28,7 @@
     group: pgbouncer
     mode: 0700
   notify: reload pgbouncer
-  loop: "{{ range(1, pgbouncer_instances + 1) | list }}"
+  loop: "{{ range(1, (pgbouncer_instances | int) + 1) | list }}"
 
 - name: Mask original service
   systemd:
