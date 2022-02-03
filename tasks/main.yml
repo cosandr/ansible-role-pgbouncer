@@ -35,8 +35,8 @@
   when: pgbouncer_instances | int == 1
 
 - name: Add pgbouncer user list
-  copy:
-    src: userlist.txt
+  template:
+    src: userlist.txt.j2
     dest: /etc/pgbouncer/userlist.txt
     owner: root
     group: pgbouncer
