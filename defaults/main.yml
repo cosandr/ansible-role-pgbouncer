@@ -9,6 +9,9 @@ pgbouncer_allow_sources: []
 pgbouncer_databases:
   - name: '*'
     opts: ''
+pgbouncer_database_ini: "/etc/pgbouncer/databases.ini"
+pgbouncer_redirect_install: false
+pgbouncer_redirect_script: "/usr/bin/pgbouncer-redirect"
 pgbouncer_default_pool_size: 1000
 pgbouncer_instances: "{{ ansible_processor_vcpus | default(3) }}"
 pgbouncer_listen: '*'

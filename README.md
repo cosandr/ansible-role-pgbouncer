@@ -60,6 +60,7 @@ host all pgbouncer 10.0.10.20 md5
 
   Defaults to `pgbouncer` with an empty password (uses peer authentication if the PG server is on the same host)
 - `pgbouncer_allow_sources` list of IPs allowed to connect to pgbouncer, all will be allowed if not specified
+- `pgbouncer_database_ini` path of file containing database config
 - `pgbouncer_databases` list of databases, defaults to localhost on unix socket
 - `pgbouncer_default_pool_size` defaults to 1000
 - `pgbouncer_instances` how many pgbouncer instances to run, defaults to number of CPUs with a fallback of 3
@@ -67,6 +68,8 @@ host all pgbouncer 10.0.10.20 md5
 - `pgbouncer_max_client_conn` defaults to 2048
 - `pgbouncer_pool_mode` defaults to `session`
 - `pgbouncer_port` defaults to 6432
+- `pgbouncer_redirect_install` set to true to install EDB's redirect script (used for failover)
+- `pgbouncer_redirect_script` sets path of redirect script
 - `pgbouncer_reserve_pool_size` defaults to 100
 - `pgbouncer_ssl_enable` whether or not to enable SSL, requires the following files to be present on the remote node:
   - `pgbouncer_ssl_ca_path` defaults to `/etc/pki/tls/certs/pg-ca.crt`

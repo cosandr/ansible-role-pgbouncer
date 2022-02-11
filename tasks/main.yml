@@ -6,6 +6,15 @@
     state: present
   tags: ["install"]
 
+- name: Install pgbouncer-redirect script
+  template:
+    src: pgbouncer-redirect.tmpl
+    dest: "{{ pgbouncer_redirect_script }}"
+    owner: root
+    group: root
+    mode: 0755
+  when: pgbouncer_redirect_install | bool
+
 - name: Copy SSL certs to pgbouncer
   copy:
     src: "{{ item.src }}"
@@ -23,6 +32,15 @@
       dest: "/etc/pgbouncer/pgbouncer.key"
   notify: restart pgbouncer
   when: pgbouncer_ssl_enable | bool
+
+- name: Configure pgbouncer databases
+  template:
+    src: databases.ini.j2
+    dest: "{{ pgbouncer_database_ini }}"
+    owner: root
+    group: pgbouncer
+    mode: 0640
+  notify: reload pgbouncer
 
 - name: Configure pgbouncer
   template:

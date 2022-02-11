@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# https://www.enterprisedb.com/docs/efm/latest/efm_deploy_arch/05_efm_pgbouncer/#configuring-failover-manager
+
+set -e
+
+#Some defaults
+PGBOUNCER_DATABASE_INI={{ pgbouncer_database_ini | quote }}
+
+PGMSTR=${1:-localhost}
+
+# enterprisedb user does not have permissions to write in folder directly, so `sed -i` will not work
+TMPFILE=$(mktemp)
+sed "s/host=[A-Za-z0-9.]*/host=${PGMSTR}/" "${PGBOUNCER_DATABASE_INI}" > "${TMPFILE}"
+if ! diff -q "${PGBOUNCER_DATABASE_INI}" "${TMPFILE}" >/dev/null; then
+    cat "${TMPFILE}" > "${PGBOUNCER_DATABASE_INI}"
+    pkill -SIGHUP pgbouncer
+fi

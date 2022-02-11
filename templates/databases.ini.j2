@@ -1,0 +1,4 @@
+[databases]
+{% for db in pgbouncer_databases %}
+{{ db.name }} = {{ db.opts | default('') }}
+{% endfor %}

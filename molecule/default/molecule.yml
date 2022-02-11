@@ -35,6 +35,7 @@ provisioner:
   inventory:
     group_vars:
       all:
+        pgbouncer_redirect_install: true
         pgbouncer_allow_sources:
           - "10.0.10.11"
           - "10.0.10.12"

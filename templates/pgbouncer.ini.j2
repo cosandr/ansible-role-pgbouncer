@@ -1,7 +1,4 @@
-[databases]
-{% for db in pgbouncer_databases %}
-{{ db.name }} = {{ db.opts | default('') }}
-{% endfor %}
+%include {{ pgbouncer_database_ini }}
 
 [pgbouncer]
 listen_addr = {{ pgbouncer_listen }}
