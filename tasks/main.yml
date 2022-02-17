@@ -37,7 +37,7 @@
   template:
     src: databases.ini.j2
     dest: "{{ pgbouncer_database_ini }}"
-    owner: root
+    owner: "{{ 'pgbouncer' if pgbouncer_redirect_install else 'root' }}"
     group: pgbouncer
     mode: 0640
   notify: reload pgbouncer
