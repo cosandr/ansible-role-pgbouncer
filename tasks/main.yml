@@ -8,7 +8,7 @@
 
 - name: Install pgbouncer-redirect script
   template:
-    src: pgbouncer-redirect.tmpl
+    src: pgbouncer-redirect.j2
     dest: "{{ pgbouncer_redirect_script }}"
     owner: root
     group: root
