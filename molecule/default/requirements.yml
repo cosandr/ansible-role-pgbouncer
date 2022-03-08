@@ -8,4 +8,4 @@
 - name: xait.config_firewall
   src: git@gitlab.xait.no:ansible-roles/xait_config_firewall.git
   scm: git
-  version: v1.0
+  version: v1.1.0

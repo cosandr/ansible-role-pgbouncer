@@ -9,8 +9,11 @@ dependencies:
   - name: xait.config_firewall
     src: git@gitlab.xait.no:ansible-roles/xait_config_firewall.git
     scm: git
-    version: v1.0
-    when: false
+    version: v1.1.0
+    vars:
+      firewall_rules:
+        - port: "{{ pgbouncer_port }}"
+          sources: "{{ pgbouncer_allow_sources }}"
 
 galaxy_info:
   role_name: xait_database_pgbouncer

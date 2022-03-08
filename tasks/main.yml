@@ -79,7 +79,3 @@
     enabled: true
   loop: "{{ range(1, (pgbouncer_instances | int) + 1) | list }}"
   when: pgbouncer_instances | int > 1
-
-- name: Configure firewall
-  include_tasks: firewall.yml
-  tags: ["firewall"]
