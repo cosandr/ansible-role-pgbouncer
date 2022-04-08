@@ -2,4 +2,4 @@
 - name: Converge
   hosts: all
   roles:
-    - xait_database_pgbouncer
+    - pgbouncer

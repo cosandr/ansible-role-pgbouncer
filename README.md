@@ -1,4 +1,4 @@
-# xait_database_pgbouncer
+# pgbouncer
 
 Installs and configures pgbouncer on EL8 or later.
 
@@ -11,14 +11,14 @@ Installs and configures pgbouncer on EL8 or later.
 Install manually
 ```sh
 # If roles_path is set in ansible.cfg
-ansible-galaxy install git+ssh://gitlab.xait.no/ansible-roles/xait_database_pgbouncer.git
+ansible-galaxy install git+ssh://github.com/cosandr/ansible-role-pgbouncer.git
 # If not, assuming you want to install to ./roles
-ansible-galaxy install -p roles git+ssh://gitlab.xait.no/ansible-roles/xait_database_pgbouncer.git
+ansible-galaxy install -p roles git+ssh://github.com/cosandr/ansible-role-pgbouncer.git
 ```
 
 With requirements.yml
 ```yml
-- src: git@gitlab.xait.no:ansible-roles/xait_database_pgbouncer.git
+- src: git@github.com:cosandr/ansible-role-pgbouncer.git
   scm: git
 ```
 ```sh
@@ -81,7 +81,7 @@ host all pgbouncer 10.0.10.20 md5
 ```yml
 - hosts: servers
   roles:
-    - role: xait_database_pgbouncer
+    - role: pgbouncer
       vars:
         pgbouncer_instances: 5
         pgbouncer_databases:
